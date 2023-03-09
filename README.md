@@ -178,23 +178,22 @@ Components:
 
 | HTTP Method | URL                    | Request Body                 | Success status | Error Status | Description                                                  |
 | ----------- | ---------------------- | ---------------------------- | -------------- | ------------ | ------------------------------------------------------------ |
-| GET         | `/auth/feed    `    | Saved session                | 200            | 404          | Check if user is logged in and return feed page           |
 | POST        | `/auth/signup`         | {first name, last name, email, password}      | 201            | 404          | Checks if fields not empty (422) and user not exists (409), then create user with encrypted password, and store user in session |
 | POST        | `/auth/login`          | {email, password}         | 200            | 401          | Checks if fields not empty (422), if user exists (404), and if password matches (404), then stores user in session |
 | POST        | `/auth/logout`         |                              | 204            | 400          | Logs out the user                                            |
 | POST         | `/api/generator`     |         { user input }                     |          200      | 400          | Save image user gallery.                                         |
 | GET         | `/api/post/create/:id` |                              |                |              | Show image and form.                                     |
 | POST        | `/api/post/create/:id`     | { user, image, description }       | 201            | 400          | Create and post on feed.                             |
-| GET         | `/api/feed` | { user, image, description }       | 200            | 400          | Show all posts                                              |
-| PUT ???      | `/api/feed` |      { post id, likes }                        | 201            | 400          | Like/dislike post.                                            |
-| GET         | `/api/feed/post/comment`     |    { user, image, description, likes, comments }                          |                |              | show specific post                                         |
+| GET         | `/api/feed` |        | 200            | 400          | Show all posts                                              |
+| POST      | `/api/feed` |      { post id, likes }                        | 201            | 400          | Like/dislike post.                                            |
+| GET         | `/api/feed/post/comment`     |                            |                |              | show specific post                                         |
 | POST        | `/api/feed/post/comment`         | { comment, like}  | 200            | 404          | create comment and like/dislike                                                   |
-| GET         | `/api/user-profile/:id`     | { first name, last name, email, description,  gallery }                | 201            | 400          | Show specific user profile                                                  |
-| POST      | `/api/user-profile/:id`     |        { post, delete, profile image, description }                      | 200            | 400          | Post image or delete image from gallery                                                |
-| GET         | `/api/user-profile/:id/edit`           |    { first name, last name, email, image, description}                          | 201            | 400          | Display form to edit profile                                                   |
-| PUT         | `/api/user-profile/:id/edit`       |                              |                |              | Update profile               |
-| POST        | `/api/games`           | {player1,player2,winner,img} |                |              | add game                                                     |
-| PUT         | `/api/games/:id`       | {winner,score}               |                |              | edit game                                                    |
+| GET         | `/api/profile/:id`     |                 | 201            | 400          | Show specific user profile                                                  |
+| POST      | `/api/profile/:id`     |        {  image }                      | 200            | 400          | Redirects to post creation                                             |
+| PUT      | `/api/profile/:id`     |                              | 200            | 400          | Change user avatar.                                                |
+| DELETE      | `/api/profile/:id`     |                              | 200            | 400          |  Delete image from user gallery.                                                |
+| GET         | `/api/profile/:id/edit`           |                              | 201            | 400          | Display form to edit profile                                                   |
+| PUT         | `/api/profile/:id/edit`       |                              |                |              | Update profile               |
 
 
 <br>
