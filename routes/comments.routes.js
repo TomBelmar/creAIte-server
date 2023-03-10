@@ -7,16 +7,17 @@ const Post = require('../models/Post.model')
 
 //Create comment
 
-router.post("/feed/post/comment", async(req, res, next)=>{
+router.post("/feed/:postId/comment", async(req, res, next)=>{
+    const {postId} = req.params
     const {creator, message} = req.body
 
     try {
         
         const comment = await Comment.create({creator, message});
 
-        await Post.findByIdAndUpdate(comment, {$push: {comment: comment._id}})
-
-        res.json(comment)
+        const newPost = await Post.findByIdAndUpdate(postId, {$push: {comment: comment._id}}, {new: true})
+        console.log(newPost)
+        res.json(newPost)
 
     } catch (error) {
         res.json(error)

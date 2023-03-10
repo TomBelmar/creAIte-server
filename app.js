@@ -48,6 +48,14 @@ app.use("/api", generatorRoutes);
 const profileRoutes = require("./routes/profile.routes");
 app.use("/api", profileRoutes);
 
+//Add to gallery
+const addGalleryRoutes = require("./routes/addGallery.routes");
+app.use("/api", addGalleryRoutes)
+
+//Add like to post
+const likeRoutes = require("./routes/like.routes");
+app.use("/api", likeRoutes)
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 
