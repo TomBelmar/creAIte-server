@@ -19,13 +19,13 @@ const saltRounds = 10;
 // POST /auth/signup  - Creates a new user in the database
 router.post("/signup", (req, res, next) => {
   const { email, password, firstName, lastName } = req.body;
-
+  
   // Check if email or password or name are provided as empty strings
   if (email === "" || password === "" || firstName === "" || lastName === "") {
     res.status(400).json({ message: "Provide email, password, first name and last name." });
     return;
   }
-
+  
   // This regular expression check that the email is of a valid format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!emailRegex.test(email)) {
@@ -38,7 +38,7 @@ router.post("/signup", (req, res, next) => {
   if (!passwordRegex.test(password)) {
     res.status(400).json({
       message:
-        "Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.",
+      "Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.",
     });
     return;
   }
@@ -55,7 +55,7 @@ router.post("/signup", (req, res, next) => {
       // If email is unique, proceed to hash the password
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashedPassword = bcrypt.hashSync(password, salt);
-
+      
       // Create the new user in the database
       // We return a pending promise, which allows us to chain another `then`
       return User.create({ email, password: hashedPassword, firstName, lastName });
@@ -63,11 +63,11 @@ router.post("/signup", (req, res, next) => {
     .then((createdUser) => {
       // Deconstruct the newly created user object to omit the password
       // We should never expose passwords publicly
-      const { email, _id } = createdUser;
+      const { email, firstName, lastName, _id } = createdUser;
 
       // Create a new object that doesn't expose the password
-      const user = { email, _id };
-
+      const user = { email, firstName, lastName, _id };
+      
       // Send a json response containing the user object
       res.status(201).json({ user: user });
     })
@@ -77,7 +77,7 @@ router.post("/signup", (req, res, next) => {
 // POST  /auth/login - Verifies email and password and returns a JWT
 router.post("/login", (req, res, next) => {
   const { email, password } = req.body;
-
+  
   // Check if email or password are provided as empty string
   if (email === "" || password === "") {
     res.status(400).json({ message: "Provide email and password." });

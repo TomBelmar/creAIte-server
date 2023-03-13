@@ -25,7 +25,7 @@ cloudinary.config({
 
 
 
-router.post('/generator', isAuthenticated, async(req, res, next) =>{
+router.post('/generator', async(req, res, next) =>{
 
 const { search } = req.body
 
