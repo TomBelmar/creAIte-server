@@ -31,4 +31,18 @@ router.delete("/gallery/:imgId", isAuthenticated, async (req, res, next) => {
     res.json(error);
   }
 });
+router.put("/gallery/avatar/:imgId", isAuthenticated, async (req, res, next) => {
+  const { _id } = req.payload;
+  const {imgId} = req.params
+
+  try {
+    const editAvatar = await User.findByIdAndUpdate(_id, {profileImage: imgId.imageURL})
+    
+    res.json(editAvatar)
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+
 module.exports = router;
