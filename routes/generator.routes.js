@@ -1,58 +1,55 @@
 const express = require("express");
 const router = express.Router();
-const cloudinary = require('cloudinary').v2
+const cloudinary = require("cloudinary").v2;
 const User = require("../models/User.model");
 const axios = require("axios");
 const { Configuration, OpenAIApi } = require("openai");
-const {isAuthenticated} = require("../middleware/jwt.middleware")
+const { isAuthenticated } = require("../middleware/jwt.middleware");
+const Image = require("../models/Image.model");
 
+const configuration = new Configuration({
+  apiKey: process.env.API_KEY,
+});
 
-  
-  const configuration = new Configuration({
-    apiKey:process.env.API_KEY,
-  
-  });
-  
-  const openai = new OpenAIApi(configuration);
-
+const openai = new OpenAIApi(configuration);
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET
+  api_secret: process.env.CLOUDINARY_SECRET,
 });
 
+router.post("/generator", isAuthenticated, async (req, res, next) => {
+  const { search } = req.body;
+  const { _id } = req.payload;
 
+  try {
+    const response = await openai.createImage({
+      prompt: search,
+      n: 2,
+      size: "256x256",
+    });
 
+    const result = await cloudinary.uploader.upload(response.data.data[0].url);
+    const result1 = await cloudinary.uploader.upload(response.data.data[1].url) 
 
-router.post('/generator', async(req, res, next) =>{
+    const createdImg = await Image.create({ imageURL: result.url });
+    const createdImg1 = await Image.create({ imageURL: result1.url });
+   
+    /*  const userUpdated = await User.findByIdAndUpdate(_id, {
+      $push: { gallery: updatedImg },
+    }); */
 
-const { search } = req.body
+    /* const updatedImgModel = await Image.findByIdAndUpdate(updatedImg._id, {
+      $push: { user: userUpdated._id },
+    }); */
 
-    try {
-        
-        const response = await openai.createImage({
-            prompt: search,
-            n: 1,
-            size: "256x256",
-           })
+    
 
-           const result = await cloudinary.uploader.upload(response.data.data[0].url)
+    res.json([createdImg, createdImg1]);
+  } catch (error) {
+    res.json(error);
+  }
+});
 
-
-
-
-
-       
-
-        res.json(result.url)
-    } catch (error) {
-        res.json(error);
-    }
-
-})
-
-
-
-
-module.exports = router
+module.exports = router;

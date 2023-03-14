@@ -4,21 +4,16 @@ const router = express.Router();
 
 const User = require("../models/User.model");
 
+router.get("/profile/:id", isAuthenticated, async (req, res, next) => {
+  const { _id } = req.payload;
 
-router.get("/profile/", isAuthenticated, async (req, res, next)=>{
-    const { _id } = req.payload;
-
-    try {
-        const profile = await User.findById(_id).populate();
-        res.json(profile);
-        
-        
-    } catch (error) {
-       res.json(error); 
-    }
-})
-
-
+  try {
+    const profile = await User.findById(_id).populate("gallery");
+    res.json(profile);
+    console.log(profile)
+  } catch (error) {
+    res.json(error);
+  }
+});
 
 module.exports = router;
-

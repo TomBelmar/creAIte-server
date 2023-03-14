@@ -7,8 +7,8 @@ const userSchema = new Schema(
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    profileImage: { type: String, default: "" },
-    gallery: [{type: String}],
+    profileImage: { type: String, default: "https://cdn.dribbble.com/users/5534/screenshots/14230133/media/e2f853f8232acad78bf143c32f2f3a04.jpg" },
+    gallery: [{ type: Schema.Types.ObjectId, ref:'Image'}],
     aboutMe: { type: String },
   },
   {
