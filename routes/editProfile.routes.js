@@ -17,7 +17,7 @@ const {email, firstName, lastName, aboutMe} = req.body
 
 
 // Delete by ID
-router.delete("/profile/", isAuthenticated, async (req, res, next) => {
+router.delete("/profile/:id", isAuthenticated, async (req, res, next) => {
   const { _id } = req.payload;
   
     try {
