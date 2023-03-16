@@ -20,8 +20,11 @@ const {isAuthenticated} = require('./middleware/jwt.middleware')
 const indexRoutes = require("./routes/index.routes");
 app.use("/api", indexRoutes);
 
-const authRoutes = require("./routes/auth.routes");
-app.use("/auth", authRoutes);
+
+    const authRoutes = require("./routes/auth.routes");
+    app.use("/auth", authRoutes);
+
+
 
 //Começando as nossas rotas:
 //Add Post
@@ -60,3 +63,5 @@ app.use("/api", likeRoutes)
 require("./error-handling")(app);
 
 module.exports = app;
+
+/* fiz isto hoje!! */
