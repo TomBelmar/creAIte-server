@@ -34,10 +34,12 @@ router.post("/generator", isAuthenticated, async (req, res, next) => {
     });
 
     const result = await cloudinary.uploader.upload(response.data.data[0].url, {secure: true});
+    const resultUrl = cloudinary.url(result.public_id, {secure: true});
     const result1 = await cloudinary.uploader.upload(response.data.data[1].url, {secure: true});
+    const resultUrl1 = cloudinary.url(result1.public_id, {secure: true});
 
-    const createdImg = await Image.create({ imageURL: result.url });
-    const createdImg1 = await Image.create({ imageURL: result1.url });
+    const createdImg = await Image.create({ imageURL: resultUrl });
+    const createdImg1 = await Image.create({ imageURL: resultUrl1 });
    
     /*  const userUpdated = await User.findByIdAndUpdate(_id, {
       $push: { gallery: updatedImg },
